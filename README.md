@@ -5,7 +5,7 @@
 專案畫面 - 註冊帳號階段
 ![](public/screenshot-register0507.png)
 
-專案畫面 - 註冊帳號階段
+專案畫面 - 購物車階段
 ![](public/screenshot-cart0507.png)
 
 產品功能:
