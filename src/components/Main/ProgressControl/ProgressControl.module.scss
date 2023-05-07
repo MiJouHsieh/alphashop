@@ -1,10 +1,10 @@
 $screen-break-point: 749.5px;
 
 section.progressControlContainer {
-  position: absolute;
+  // position: absolute;
   left: 0px;
   right: 0px;
-  bottom: -90px; //讓Cart先空著
+  bottom: 0px; 
 }
 section.buttonGroup {
   padding-top: 24px;
