@@ -1,6 +1,6 @@
 import './Main.scss'
 import Register from './Register/Register'
-// import Cart from './Cart/Cart'
+import Cart from './Cart/Cart'
 import ProgressControl from './ProgressControl/ProgressControl'
 
 export default function Main () {
@@ -8,7 +8,7 @@ export default function Main () {
     <main className='site-main'>
       <div className='main-container'>
         <Register />
-        {/* <Cart /> */}
+        <Cart />
         <ProgressControl />
       </div>
     </main>
