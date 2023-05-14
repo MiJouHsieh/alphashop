@@ -27,22 +27,25 @@ function ListItems ({ item, onCartItemsChange }) {
         <div className={styles.productName}>{item.name}</div>
         <div className={styles.productControlContainer}>
           <div className={styles.productControl}>
+            {/* 商品數量減一 */}
             <span
               onClick={() => {
                 onCartItemsChange?.({ id: item.id, quantity: item.quantity - 1 })
-              }}
-            />
-            <span className={styles.productAction}>
-              <img src={minusIcon} alt="minus icon" />
+            }}>
+              <span className={styles.productAction}>
+                <img src={minusIcon} alt="minus icon" />
+              </span>
             </span>
+            {/* 商品數量 */}
             <span className={styles.productCount}>{item.quantity}</span>
+            {/* 商品數量加一 */}
             <span
               onClick={() => {
                 onCartItemsChange?.({ id: item.id, quantity: item.quantity + 1 })
-              }}
-            />
-            <span className={styles.productAction}>
-              <img src={plusIcon} alt="plus icon" />
+            }}>
+              <span className={styles.productAction}>
+                <img src={plusIcon} alt="plus icon" />
+              </span>
             </span>
           </div>
         </div>
@@ -53,9 +56,10 @@ function ListItems ({ item, onCartItemsChange }) {
 }
 
 export default function Cart () {
+  // 狀態變數
   const [items, setItems] = useState(productData)
 
-  const handleCartItemsChange = ({ id, quantity }) => {
+  function handleCartItemsChange ({ id, quantity }) {
     if (quantity < 0) {
       return
     }
@@ -76,11 +80,13 @@ export default function Cart () {
   items.forEach(item => {
     count = count + item.price * item.quantity
   })
-  return (
-    <section classNameName={`${styles.cartContainer} col col-lg-5 col-sm-12`}>
-      <h3 className={styles.CartTitle}>購物籃</h3>
 
-      <section className={`${styles.productList} col col-12"`} data-total-price='0'>
+
+  return (
+    <section className={`${styles.cartContainer} col col-lg-5 col-sm-12`}>
+      <h3 className={styles.cartTitle}>購物籃</h3>
+
+      <section className={`${styles.productList} col col-12`} data-total-price='0'>
         {items.map((item) => (
           <ListItems
             item={item}
@@ -92,11 +98,11 @@ export default function Cart () {
 
       <section className={`${styles.cartInfo} shipping col col-12`}>
         <div className={styles.text}>運費</div>
-        <div className={styles.price} />
+        <div className={styles.price}>免費</div>
       </section>
       <section className={`${styles.cartInfo} total col col-12`}>
         <div className={styles.text}>小計</div>
-        <div className={styles.price} />
+        <div className={styles.price}>{count}</div>
       </section>
     </section>
   )
