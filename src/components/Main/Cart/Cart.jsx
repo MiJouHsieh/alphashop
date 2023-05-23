@@ -61,10 +61,7 @@ function ListItems ({products, onDecreaseClick, onIncreaseClick}) {
 
 export default function Cart () {
   const [products, setProducts] = useState(productData)
-  let count = 0
-  products.forEach(product => {
-    count = count + product.price * product.quantity
-  })
+  const totalPrice = products.map(product => product.price * product.quantity).reduce((acc, cur) => acc + cur)
   function handleDecreaseClick(productId) {
     let changeProducts = products.map(product => {
       if(product.id === productId) {
@@ -112,7 +109,7 @@ export default function Cart () {
       </section>
       <section className={`${styles.cartInfo} total col col-12`}>
         <div className={styles.text}>小計</div>
-        <div className={styles.price}>$ {count}</div>
+        <div className={styles.price}>$ {totalPrice}</div>
       </section>
     </section>
   )
