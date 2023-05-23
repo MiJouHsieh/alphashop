@@ -19,39 +19,72 @@ const productData = [
     quantity: 1
   }
 ]
-function ListItems ({ item, onCartItemsChange }) {
+function ListItems ({ onCartItemsChange }) {
+  const [products, setProducts] = useState(productData)
+
+  function handleDecreaseClick(productId) {
+    let changeProducts = products.map(product => {
+      if(product.id === productId) {
+        return {
+          ...product,
+          // 數量最低為0
+          quantity: (product.quantity - 1) > 0 ? (product.quantity - 1) : 0 
+        }
+      } else {
+        return product
+      }
+    })
+    setProducts(changeProducts)
+  }
+
+  function handleIncreaseClick(productId) {
+    const changeProducts = products.map(product => {
+      if(product.id === productId) {
+        return {
+          ...product,
+          quantity: product.quantity + 1
+        }
+      } else {
+        return product
+      }
+    })
+    setProducts(changeProducts)
+  }
   return (
-    <div key={item.id} className={`${styles.productContainer} col col-12`} data-count='0' data-price={item.price}>
-      <img className={styles.imgContainer} src={item.img} alt={item.name} />
-      <div className={styles.productInfo}>
-        <div className={styles.productName}>{item.name}</div>
-        <div className={styles.productControlContainer}>
-          <div className={styles.productControl}>
-            {/* 商品數量減一 */}
-            <span
-              onClick={() => {
-                onCartItemsChange?.({ id: item.id, quantity: item.quantity - 1 })
-            }}>
-              <span className={styles.productAction}>
-                <img src={minusIcon} alt="minus icon" />
-              </span>
-            </span>
-            {/* 商品數量 */}
-            <span className={styles.productCount}>{item.quantity}</span>
-            {/* 商品數量加一 */}
-            <span
-              onClick={() => {
-                onCartItemsChange?.({ id: item.id, quantity: item.quantity + 1 })
-            }}>
-              <span className={styles.productAction}>
-                <img src={plusIcon} alt="plus icon" />
-              </span>
-            </span>
+    <ul>
+      {products.map(product => (
+        <div key={product.id} className={`${styles.productContainer} col col-12`} data-count='0' data-price={product.price}>
+          <img className={styles.imgContainer} src={product.img} alt={product.name} />
+          <div className={styles.productInfo}>
+            <div className={styles.productName}>{product.name}</div>
+            <div className={styles.productControlContainer}>
+              <div className={styles.productControl}>
+                {/* 商品數量減一 */}
+                <span
+                  onClick={() => {
+                    handleDecreaseClick(product.id)
+                }}>
+                  <span className={styles.productAction}>
+                    <img src={minusIcon} alt="minus icon" />
+                  </span>
+                </span>
+                {/* 商品數量 */}
+                <span className={styles.productCount}>{product.quantity}</span>
+                {/* 商品數量加一 */}
+                <span onClick={() => {
+                  handleIncreaseClick(product.id)
+                }}>
+                  <span className={styles.productAction}>
+                    <img src={plusIcon} alt="plus icon" />
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div className={styles.price}>{product.price * product.quantity}</div>
           </div>
         </div>
-        <div className={styles.price}>{item.price * item.quantity}</div>
-      </div>
-    </div>
+      ))}
+    </ul>
   )
 }
 
@@ -87,13 +120,9 @@ export default function Cart () {
       <h3 className={styles.cartTitle}>購物籃</h3>
 
       <section className={`${styles.productList} col col-12`} data-total-price='0'>
-        {items.map((item) => (
-          <ListItems
-            item={item}
-            key={item.id}
-            onCartChange={handleCartItemsChange}
-          />
-        ))}
+        <ListItems
+          onCartChange={handleCartItemsChange}
+        />
       </section>
 
       <section className={`${styles.cartInfo} shipping col col-12`}>
@@ -102,7 +131,7 @@ export default function Cart () {
       </section>
       <section className={`${styles.cartInfo} total col col-12`}>
         <div className={styles.text}>小計</div>
-        <div className={styles.price}>{count}</div>
+        <div className={styles.price}>$ {count}</div>
       </section>
     </section>
   )
