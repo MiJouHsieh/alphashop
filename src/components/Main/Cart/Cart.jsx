@@ -19,9 +19,52 @@ const productData = [
     quantity: 1
   }
 ]
-function ListItems ({ onCartItemsChange }) {
-  const [products, setProducts] = useState(productData)
+function ListItems ({products, onDecreaseClick, onIncreaseClick}) {
+  
+  return (
+    <ul>
+      {products.map(product => (
+        <div key={product.id} className={`${styles.productContainer} col col-12`} data-count='0' data-price={product.price}>
+          <img className={styles.imgContainer} src={product.img} alt={product.name} />
+          <div className={styles.productInfo}>
+            <div className={styles.productName}>{product.name}</div>
+            <div className={styles.productControlContainer}>
+              <div className={styles.productControl}>
+                {/* 商品數量減一 */}
+                <span
+                  onClick={() => {
+                    onDecreaseClick(product.id)
+                }}>
+                  <span className={styles.productAction}>
+                    <img src={minusIcon} alt="minus icon" />
+                  </span>
+                </span>
+                {/* 商品數量 */}
+                <span className={styles.productCount}>{product.quantity}</span>
+                {/* 商品數量加一 */}
+                <span onClick={() => {
+                  onIncreaseClick(product.id)
+                }}>
+                  <span className={styles.productAction}>
+                    <img src={plusIcon} alt="plus icon" />
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div className={styles.price}>{product.price * product.quantity}</div>
+          </div>
+        </div>
+      ))}
+    </ul>
+  )
+}
 
+export default function Cart () {
+  const [products, setProducts] = useState(productData)
+  let count = 0
+  products.forEach(product => {
+    count = count + product.price * product.quantity
+  })
   function handleDecreaseClick(productId) {
     let changeProducts = products.map(product => {
       if(product.id === productId) {
@@ -50,70 +93,6 @@ function ListItems ({ onCartItemsChange }) {
     })
     setProducts(changeProducts)
   }
-  return (
-    <ul>
-      {products.map(product => (
-        <div key={product.id} className={`${styles.productContainer} col col-12`} data-count='0' data-price={product.price}>
-          <img className={styles.imgContainer} src={product.img} alt={product.name} />
-          <div className={styles.productInfo}>
-            <div className={styles.productName}>{product.name}</div>
-            <div className={styles.productControlContainer}>
-              <div className={styles.productControl}>
-                {/* 商品數量減一 */}
-                <span
-                  onClick={() => {
-                    handleDecreaseClick(product.id)
-                }}>
-                  <span className={styles.productAction}>
-                    <img src={minusIcon} alt="minus icon" />
-                  </span>
-                </span>
-                {/* 商品數量 */}
-                <span className={styles.productCount}>{product.quantity}</span>
-                {/* 商品數量加一 */}
-                <span onClick={() => {
-                  handleIncreaseClick(product.id)
-                }}>
-                  <span className={styles.productAction}>
-                    <img src={plusIcon} alt="plus icon" />
-                  </span>
-                </span>
-              </div>
-            </div>
-            <div className={styles.price}>{product.price * product.quantity}</div>
-          </div>
-        </div>
-      ))}
-    </ul>
-  )
-}
-
-export default function Cart () {
-  // 狀態變數
-  const [items, setItems] = useState(productData)
-
-  function handleCartItemsChange ({ id, quantity }) {
-    if (quantity < 0) {
-      return
-    }
-    setItems((prevItems) => {
-      return prevItems.map((item) => {
-        if (item.id === id) {
-          return {
-            ...item,
-            quantity
-          }
-        }
-        return item
-      })
-    })
-  }
-  //  計算加總金額
-  let count = 0
-  items.forEach(item => {
-    count = count + item.price * item.quantity
-  })
-
 
   return (
     <section className={`${styles.cartContainer} col col-lg-5 col-sm-12`}>
@@ -121,7 +100,9 @@ export default function Cart () {
 
       <section className={`${styles.productList} col col-12`} data-total-price='0'>
         <ListItems
-          onCartChange={handleCartItemsChange}
+          products={products}
+          onDecreaseClick={handleDecreaseClick}
+          onIncreaseClick={handleIncreaseClick}
         />
       </section>
 
